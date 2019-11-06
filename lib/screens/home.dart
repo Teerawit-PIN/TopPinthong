@@ -9,9 +9,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   // Field
 
-
-  
-
   // Method
   Widget signInButton() {
     return Expanded(
@@ -108,18 +105,22 @@ class _HomeState extends State<Home> {
                   image: AssetImage('images/background.jpg'),
                   fit: BoxFit.cover)),
           child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                showLogo(),
-                showAppName(),
-                userText(),
-                passWord(),
-                SizedBox(
-                  height: 8.0,
-                ),
-                showButton(),
-              ],
+            child: Container(
+              padding: MyStyle().padding20,
+              color: MyStyle().bgColor,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  showLogo(),
+                  showAppName(),
+                  userText(),
+                  passWord(),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  showButton(),
+                ],
+              ),
             ),
           ),
         ),
