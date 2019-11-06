@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toppinthong/screens/register.dart';
 import 'package:toppinthong/utility/style.dart';
 
 class Home extends StatefulWidget {
@@ -34,7 +35,16 @@ class _HomeState extends State<Home> {
           'สมัครสมาชิก',
           style: MyStyle().bdTxtStyle,
         ),
-        onPressed: () {},
+        onPressed: () {
+          // print('Sign Up');
+
+          // Create Route Arrow Back
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext contaxt) {
+            return Register();
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
       ),
     );
   }
