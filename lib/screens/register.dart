@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:toppinthong/utility/style.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +13,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   //Field
+  final keyForm = GlobalKey<FormState>();
+  String name, user, password;
 
   //Method
   Widget nameText() {
@@ -26,10 +32,20 @@ class _RegisterState extends State<Register> {
           ),
           labelText: 'Display Name :',
           labelStyle: MyStyle().txtStyle600,
-          helperText: 'กรุณาพิมพ์ชื่อ',
+          helperText: 'พิมพ์ชื่อ',
           helperStyle: MyStyle().txtStyle600h,
           hintText: 'ภาษาไทยเท่านั้น',
         ),
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'กรุณาพิมพ์ชื่อ';
+          } else {
+            return null;
+          }
+        },
+        onSaved: (value) {
+          name = value.trim();
+        },
       ),
     );
   }
@@ -42,6 +58,7 @@ class _RegisterState extends State<Register> {
         right: 30.0,
       ),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           icon: Icon(
             Icons.account_box,
@@ -50,10 +67,22 @@ class _RegisterState extends State<Register> {
           ),
           labelText: 'Username :',
           labelStyle: MyStyle().txtStyle600,
-          helperText: 'กรุณาพิมพ์ชื่อเข้าระบบ',
+          helperText: 'พิมพ์อีเมลเพื่อเข้าระบบ',
           helperStyle: MyStyle().txtStyle600h,
           hintText: 'ภาษาอังกฤษเท่านั้น',
         ),
+        validator: (String value) {
+          if (value.isEmpty) {
+            return 'กรุณาพิมพ์อีเมลเพื่อเข้าระบบ';
+          } else if (!((value.contains('@')) && (value.contains('.')))) {
+            return 'กรุณากรกอกอีเมลให้ถูกต้อง';
+          } else {
+            return null;
+          }
+        },
+        onSaved: (value) {
+          user = value.trim();
+        },
       ),
     );
   }
@@ -66,6 +95,7 @@ class _RegisterState extends State<Register> {
         right: 30.0,
       ),
       child: TextFormField(
+        obscureText: true,
         decoration: InputDecoration(
           icon: Icon(
             Icons.lock,
@@ -76,8 +106,18 @@ class _RegisterState extends State<Register> {
           labelStyle: MyStyle().txtStyle600,
           helperText: 'กรุณาพิมพ์รหัสผ่าน',
           helperStyle: MyStyle().txtStyle600h,
-          hintText: 'มากกว่า 6 ตัวอักษร',
+          hintText: 'ตั้งแต่ 6 ตัวอักษรขึ้นไป',
         ),
+        validator: (value) {
+          if (value.length < 6) {
+            return 'ต้องมีตัวอักษรตั้งแต่ 6 ตัวขึ้นไป';
+          } else {
+            return null;
+          }
+        },
+        onSaved: (value) {
+          password = value.trim();
+        },
       ),
     );
   }
@@ -96,8 +136,31 @@ class _RegisterState extends State<Register> {
     return IconButton(
       tooltip: 'ยืนยันการสมัคร',
       icon: Icon(Icons.check),
-      onPressed: () {},
+      onPressed: () {
+        // print('Submit');
+        if (keyForm.currentState.validate()) {
+          // print('OK');
+          keyForm.currentState.save();
+          // print('name= $name,user= $user,password= $password');
+          registerThread();
+        }
+      },
     );
+  }
+
+  Future<void> registerThread() async {
+    String url =
+        'https://www.androidthai.in.th/pint/addDataTop.php?isAdd=true&name=$name&user=$user&password=$password';
+    Response response = await get(url);
+
+    var result = json.decode(response.body);
+    // print('$result');
+
+    if (result.toString() == 'true') {
+      Navigator.of(context).pop();
+    } else {
+
+    }
   }
 
   @override
@@ -115,17 +178,20 @@ class _RegisterState extends State<Register> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         )),
-        child: ListView(
-          padding: EdgeInsets.all(30.0),
-          children: <Widget>[
-            showCurrentDate(),
-            SizedBox(
-              height: 20.0,
-            ),
-            nameText(),
-            userText(),
-            passwordText(),
-          ],
+        child: Form(
+          key: keyForm,
+          child: ListView(
+            padding: EdgeInsets.all(30.0),
+            children: <Widget>[
+              showCurrentDate(),
+              SizedBox(
+                height: 20.0,
+              ),
+              nameText(),
+              userText(),
+              passwordText(),
+            ],
+          ),
         ),
       ),
     );
