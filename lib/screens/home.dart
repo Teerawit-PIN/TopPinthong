@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:toppinthong/screens/register.dart';
+import 'package:toppinthong/utility/alert.dart';
 import 'package:toppinthong/utility/style.dart';
 
 class Home extends StatefulWidget {
@@ -9,6 +13,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   // Field
+  final formKey = GlobalKey<FormState>();
+  String user, password;
 
   // Method
   Widget signInButton() {
@@ -20,9 +26,24 @@ class _HomeState extends State<Home> {
           'เข้าสู้ระบบ',
           style: MyStyle().btTxtStyle,
         ),
-        onPressed: () {},
+        onPressed: () {
+          formKey.currentState.save();
+          // print('$user+$password');
+          checkAuthen();
+        },
       ),
     );
+  }
+
+  Future<void> checkAuthen() async {
+    if (user.isEmpty) {
+      nomalDaialog(context, 'ยังไม่ได้กรอกอีเมล', 'กรุณากรอกอีเมล');
+    } else if (password.isEmpty) {
+      nomalDaialog(context, 'ยังไม่ได้กรอกรหัสผ่าน', 'กรุณากรอกรหัสผ่าน');
+    }else{
+
+    }
+    
   }
 
   Widget signUpButton() {
@@ -69,10 +90,20 @@ class _HomeState extends State<Home> {
     return Container(
       width: 250.0,
       child: TextFormField(
+        style: TextStyle(color: MyStyle().btColor),
         decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: MyStyle().btColor),
+          ),
           labelText: 'User :',
           labelStyle: MyStyle().txtStyle600,
         ),
+        onSaved: (value) {
+          user = value.trim();
+        },
       ),
     );
   }
@@ -81,11 +112,21 @@ class _HomeState extends State<Home> {
     return Container(
       width: 250.0,
       child: TextFormField(
+        style: TextStyle(color: MyStyle().btColor),
         obscureText: true,
         decoration: InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: MyStyle().btColor),
+          ),
           labelText: 'Password :',
           labelStyle: MyStyle().txtStyle600,
         ),
+        onSaved: (value) {
+          password = value.trim();
+        },
       ),
     );
   }
@@ -124,18 +165,21 @@ class _HomeState extends State<Home> {
             child: Container(
               padding: MyStyle().padding20,
               color: MyStyle().bgColor,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  showLogo(),
-                  showAppName(),
-                  userText(),
-                  passWord(),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  showButton(),
-                ],
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    showLogo(),
+                    showAppName(),
+                    userText(),
+                    passWord(),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    showButton(),
+                  ],
+                ),
               ),
             ),
           ),
