@@ -69,7 +69,10 @@ class _HomeState extends State<Home> {
     return Container(
       width: 250.0,
       child: TextFormField(
-        decoration: InputDecoration(labelText: 'User :'),
+        decoration: InputDecoration(
+          labelText: 'User :',
+          labelStyle: MyStyle().txtStyle600,
+        ),
       ),
     );
   }
@@ -79,7 +82,10 @@ class _HomeState extends State<Home> {
       width: 250.0,
       child: TextFormField(
         obscureText: true,
-        decoration: InputDecoration(labelText: 'Password :'),
+        decoration: InputDecoration(
+          labelText: 'Password :',
+          labelStyle: MyStyle().txtStyle600,
+        ),
       ),
     );
   }
