@@ -1,3 +1,4 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:toppinthong/utility/style.dart';
 
@@ -21,13 +22,29 @@ class _Page2State extends State<Page2> {
                           child: RaisedButton.icon(
                 icon: Icon(Icons.photo_camera),
                 label: Text('Read QR or Barcode'),
-                onPressed: () {},
+                onPressed: () {
+                  readQRthread();
+                },
               ),
             ),
           ],
         ),
       ],
     );
+  }
+
+  Future<void> readQRthread()async{
+    try {
+      String readedQR = await BarcodeScanner.scan();
+
+      if (readedQR != null) {
+        setState(() {
+          codeString = readedQR;
+        });
+      }
+
+    } catch (e) {
+    }
   }
 
   Widget codeReaded() {
