@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
         nomalDaialog(context, 'ไม่พบอีเมลนี้',
             'โปรดตรวจสอบชื่อผู้ใช้หรือรหัสผ่านให้ถูกต้อง');
       } else {
-        print(result);
+        // print(result);
         for (var map in result) {
           // print('$map');
           userModel = UserModel.fromAPI(map);
@@ -133,6 +133,7 @@ class _HomeState extends State<Home> {
     return Container(
       width: 250.0,
       child: TextFormField(
+        initialValue: 'top@pin.com',
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(color: MyStyle().btColor),
         decoration: InputDecoration(

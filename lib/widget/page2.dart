@@ -48,6 +48,13 @@ class _Page2State extends State<Page2> {
   }
 
   Widget codeReaded() {
+    var barcode = '$codeString';
+    List<String> tests = barcode.split(" ");
+    int index = 0;
+    for (var test in tests) {
+      print('tests[$index]=$test');
+      index+=1;
+    }
     return Center(
       child: Text(
         'Code Readed $codeString',
